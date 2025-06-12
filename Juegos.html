@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pausa Visual</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: url("Imagenes/Fondopose.png") no-repeat center center fixed;
+        background-size: cover;
+        font-family: "Montserrat", sans-serif;
+        color: #222;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 2rem;
+        text-align: center;
+      }
+
+      .section-container {
+        max-width: 1000px;
+        padding: 7rem 1rem 2rem 1rem;
+        width: 100%;
+        position: relative;
+      }
+
+      h1.title {
+        font-size: 2.4rem;
+        font-weight: 700;
+        color: #48b0ff;
+        margin-bottom: 0.2rem;
+      }
+
+      p.subtitle {
+        font-size: 1.2rem;
+        color: whitesmoke;
+        margin-top: 0;
+        margin-bottom: 3rem;
+      }
+
+      .break-zone {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .card {
+        width: 220px;
+        height: 300px;
+        border-radius: 15px;
+        background: white;
+        border: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 1rem 0.8rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #222;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+      }
+
+      .card:hover {
+        box-shadow: 0 8px 20px rgba(0, 139, 248, 0.5);
+        transform: translateY(-5px);
+      }
+
+      .card-details {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+        justify-content: flex-start;
+      }
+
+      .image-wrapper {
+        width: 140px;
+        height: 140px;
+        border-radius: 15px;
+        user-select: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        background: #f0f0f0;
+        margin-top: 1rem;
+      }
+
+      .image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 15px;
+      }
+
+      .text-title {
+        font-size: 1.2em;
+        font-weight: 600;
+        color: #274c96;
+        margin: 0.3rem 0 0.5rem 0;
+      }
+
+      .card p {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.2em;
+        color: #444;
+      }
+
+      .buttons-container {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .skip-button {
+        background-color: #ff4d4f;
+        color: white;
+        border: none;
+        padding: 0.5rem 1.2rem;
+        border-radius: 30px;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transition: background 0.3s ease;
+        min-width: 140px;
+      }
+
+      .skip-button:hover {
+        background-color: #e63a3c;
+      }
+
+      #backToIndexBtn {
+        position: absolute;
+        bottom: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0.6rem 1.2rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        background-color: #48b0ff;
+        color: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        user-select: none;
+        margin-bottom: -0.3rem;
+      }
+
+      #iframeContainer {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        text-align: center;
+        margin-top: -9rem;
+        width: 100%;
+        height: 100%;
+      }
+
+      #descansoIframe {
+        width: 100%;
+        max-width: 1410px;
+        height: 730px;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+        margin-top: 1rem;
+      }
+
+      @media (max-width: 600px) {
+        .break-zone {
+          flex-direction: column;
+          gap: 1.5rem;
+          max-width: 280px;
+        }
+
+        .card {
+          width: 100%;
+          height: auto;
+        }
+
+        .buttons-container {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        #descansoIframe {
+          height: 400px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="section-container">
+      <button id="backToIndexBtn" onclick="window.location.href='index.html'">
+        Volver
+      </button>
+
+      <h1 class="title">¡Tomate un descanso activo!</h1>
+      <p class="subtitle">
+        Elegí alguna de estas tres opciones para disfrutar de un descanso
+        placentero
+      </p>
+
+      <div class="break-zone">
+        <div class="card" onclick="chooseOption(0)">
+          <div class="card-details">
+            <div class="image-wrapper">
+              <img src="Imagenes/FluidoGame.png" alt="Elongación Lumbar" />
+            </div>
+            <h2 class="text-title">Humo Magico</h2>
+            <p>
+              Seguí el humo en pantalla y dejá que tu mente se relaje. Estimula
+              la creatividad y reduce el estrés visual.
+            </p>
+          </div>
+        </div>
+        <div class="card" onclick="chooseOption(1)">
+          <div class="card-details">
+            <div class="image-wrapper">
+              <img src="Imagenes/puzzle.jpeg" alt="Inferiores" />
+            </div>
+            <h2 class="text-title">Puzzle</h2>
+            <p>
+              Uní las piezas y completá la figura. Mejora el enfoque y brinda
+              una sensación de calma.
+            </p>
+          </div>
+        </div>
+        <div class="card" onclick="chooseOption(2)">
+          <div class="card-details">
+            <div class="image-wrapper">
+              <img src="Imagenes/sudoku.jpg" alt="Sudoku" />
+            </div>
+            <h2 class="text-title">Sudoku</h2>
+            <p>
+              Clásico juego de números que ejercita el pensamiento lógico y la
+              concentración.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="buttons-container">
+        <button
+          class="skip-button"
+          onclick="window.location.href='https://www.google.com'"
+        >
+          Omitir descanso
+        </button>
+      </div>
+    </div>
+
+    <div id="iframeContainer">
+      <iframe id="descansoIframe" src=""></iframe>
+    </div>
+
+    <div
+      id="redirectTimer"
+      style="
+        position: fixed;
+        top: 95%;
+        left: 50%;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-family: monospace;
+        z-index: 999;
+        transform: translate(-50%, -50%);
+      "
+    >
+    </div>
+
+    <script>
+      const TIMER_KEY = "redirectTimestamp";
+      const DURATION_MS = 5 * 60 * 1000;
+
+      function formatTime(ms) {
+        const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+        const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+        const seconds = String(totalSeconds % 60).padStart(2, "0");
+        return `${minutes}:${seconds}`;
+      }
+
+      function startPersistentTimer() {
+        let start = localStorage.getItem(TIMER_KEY);
+        const now = Date.now();
+
+        if (!start) {
+          start = Date.now();
+          localStorage.setItem(TIMER_KEY, start);
+        }
+
+        const timerEl = document.getElementById("redirectTimer");
+
+        function updateTimer() {
+          const now = Date.now();
+          const elapsed = now - parseInt(localStorage.getItem(TIMER_KEY));
+          const remaining = DURATION_MS - elapsed;
+          timerEl.textContent = `Tiempo de descanso: ${formatTime(remaining)}`;
+
+          if (remaining <= 0) {
+            clearInterval(interval);
+            localStorage.removeItem(TIMER_KEY);
+            window.location.href = "https://www.google.com";
+          }
+        }
+
+        updateTimer();
+        const interval = setInterval(updateTimer, 1000);
+      }
+
+      startPersistentTimer();
+
+      let hasChosen = false;
+
+      function chooseOption(index) {
+        if (hasChosen) return;
+        hasChosen = true;
+
+        const pages = ["fluido.html", "rcabeza.html", "sudoku.html"];
+        document.getElementById("descansoIframe").src = pages[index];
+
+        document.querySelector(".break-zone").style.display = "none";
+        document.querySelector(".buttons-container").style.display = "none";
+        document.querySelector(".title").style.display = "none";
+        document.querySelector(".subtitle").style.display = "none";
+        document.getElementById("backToIndexBtn").style.display = "none";
+        document.getElementById("iframeContainer").style.display = "flex";
+
+        addBackButton();
+      }
+
+      function addBackButton() {
+        if (document.getElementById("backBtn")) return;
+
+        const btn = document.createElement("button");
+        btn.id = "backBtn";
+        btn.textContent = "Volver";
+        btn.style.marginTop = "1rem";
+        btn.style.padding = "0.6rem 1.2rem";
+        btn.style.fontSize = "1rem";
+        btn.style.borderRadius = "8px";
+        btn.style.border = "none";
+        btn.style.cursor = "pointer";
+        btn.style.backgroundColor = "#48b0ff";
+        btn.style.color = "white";
+        btn.style.boxShadow = "0 4px 12px rgba(0,0,0,0.3)";
+
+        btn.onclick = () => {
+          hasChosen = false;
+          document.querySelector(".break-zone").style.display = "flex";
+          document.querySelector(".buttons-container").style.display = "flex";
+          document.querySelector(".title").style.display = "block";
+          document.querySelector(".subtitle").style.display = "block";
+          document.getElementById("iframeContainer").style.display = "none";
+          document.getElementById("descansoIframe").src = "";
+          btn.remove();
+          document.getElementById("backToIndexBtn").style.display = "block";
+        };
+
+        document.getElementById("iframeContainer").appendChild(btn);
+      }
+    </script>
+  </body>
+</html>

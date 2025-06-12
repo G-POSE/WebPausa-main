@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pausa Visual</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: url("Imagenes/Fondopose.png") no-repeat center center fixed;
+        background-size: cover;
+        font-family: "Montserrat", sans-serif;
+        color: #222;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 2rem;
+        text-align: center;
+      }
+
+      .section-container {
+        max-width: 1170px;
+        padding: 7rem 1rem 2rem 1rem;
+        width: 100%;
+      }
+
+      h1.title {
+        font-size: 2.4rem;
+        font-weight: 700;
+        color: #48b0ff;
+        margin-bottom: 0.2rem;
+      }
+
+      p.subtitle {
+        font-size: 1.3rem;
+        color: whitesmoke;
+        margin-top: 0;
+        margin-bottom: 3rem;
+      }
+
+      .break-zone {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .card {
+        width: 220px;
+        height: 300px;
+        border-radius: 15px;
+        background: white;
+        border: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 1rem 0.8rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #222;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+      }
+
+      .card:hover {
+        box-shadow: 0 8px 20px rgba(0, 139, 248, 0.5);
+        transform: translateY(-5px);
+      }
+
+      .card-details {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+        justify-content: flex-start;
+      }
+
+      .image-wrapper {
+        width: 140px;
+        height: 140px;
+        font-size: 5rem;
+        border-radius: 15px;
+        user-select: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .text-title {
+        font-size: 1.6em;
+        font-weight: 600;
+        color: #274c96;
+        margin: 0.3rem 0 0.5rem 0;
+      }
+
+      .card p {
+        margin: 0;
+        font-size: 0.92rem;
+        line-height: 1.2em;
+        color: #444;
+      }
+
+      .fixed-timer {
+        position: fixed;
+        top: 95%;
+        left: 50%;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-family: monospace;
+        z-index: 999;
+        transform: translate(-50%, -50%);
+      }
+
+      @media (max-width: 600px) {
+        .break-zone {
+          flex-direction: column;
+          gap: 1.5rem;
+          max-width: 280px;
+        }
+
+        .card {
+          width: 100%;
+          height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="section-container">
+      <h1 class="title">¡Es hora de una Pausa Activa!</h1>
+      <p class="subtitle">
+        Mové tu cuerpo, activá tu bienestar.<br />
+        Elegí la actividad que mejor se adapte a vos: Estiramientos, Eespiración
+        o Momento Lúdico para despejarte. ¡Unos minutos pueden hacer la
+        diferencia!
+      </p>
+
+      <div class="break-zone">
+        <div class="card" onclick="chooseOption(0)">
+          <div class="card-details">
+            <div class="image-wrapper">🧘</div>
+            <h2 class="text-title">Actividades</h2>
+            <p>
+              Espacio donde encontrarás instrucciones para activación o
+              estiramiento de tu cuerpo
+            </p>
+          </div>
+        </div>
+        <div class="card" onclick="chooseOption(1)">
+          <div class="card-details">
+            <div class="image-wrapper">🎮</div>
+            <h2 class="text-title">Juegos</h2>
+            <p>Descansá y divertite con estos minijuegos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Temporizador fijo -->
+    <div id="redirectTimer" class="fixed-timer">Redirigiendo en: 05:00</div>
+
+    <script>
+      function chooseOption(index) {
+        const pages = ["Actividades.html", "Juegos.html"];
+        window.location.href = pages[index];
+      }
+
+      // Timer persistente con localStorage
+      const TIMER_KEY = "redirectTimestamp";
+      const DURATION_MS = 5 * 60 * 1000;
+
+      function formatTime(ms) {
+        const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+        const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+        const seconds = String(totalSeconds % 60).padStart(2, "0");
+        return `${minutes}:${seconds}`;
+      }
+
+      function startPersistentTimer() {
+        let start = localStorage.getItem(TIMER_KEY);
+        const now = Date.now();
+
+        if (!start) {
+          start = Date.now();
+          localStorage.setItem(TIMER_KEY, start);
+        }
+
+        const timerEl = document.getElementById("redirectTimer");
+
+        function updateTimer() {
+          const now = Date.now();
+          const elapsed = now - parseInt(localStorage.getItem(TIMER_KEY));
+          const remaining = DURATION_MS - elapsed;
+          timerEl.textContent = `Tiempo de descanso: ${formatTime(remaining)}`;
+
+          if (remaining <= 0) {
+            clearInterval(interval);
+            localStorage.removeItem(TIMER_KEY);
+            window.location.href = "https://www.google.com";
+          }
+        }
+
+        updateTimer();
+        const interval = setInterval(updateTimer, 1000);
+      }
+
+      startPersistentTimer();
+    </script>
+  </body>
+</html>
